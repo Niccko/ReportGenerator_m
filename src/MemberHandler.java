@@ -1,16 +1,15 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MemberHandler {
     private Map<String,String> repoLinks = new HashMap<>();
     public MemberHandler(){
-        repoLinks.put("Анисимов Андрей","https://github.com/Unusualuser/javan");
+        repoLinks.put("Анисимов Андрей","https://github.com/Unusualuser/javan/tree/master/Projects/Main");
         repoLinks.put("Гибова Екатерина","https://github.com/katyagibova/java_proj");
         repoLinks.put("Гонец Артем","https://github.com/Gonets-Artem/Java-Mirea");
-        repoLinks.put("Гридасов Егор","https://github.com/EgorCry/Java_MIREA_tasks/tree/master/src");
-        repoLinks.put("Гудаев Исмаил","https://github.com/gigagibi/JAVA_MIREA_PRACTICE/tree/master/src");
+        repoLinks.put("Гридасов Егор","https://github.com/EgorCry/Java_MIREA_tasks");
+        repoLinks.put("Гудаев Исмаил","https://github.com/gigagibi/JAVA_MIREA_PRACTICE");
         repoLinks.put("Денисенко Алексей","https://github.com/alexeydenisenkoofficial/zanoza");
-        repoLinks.put("Дударев Максим","https://github.com/MrCrashLab/JavaPractice/tree/master/src");
+        repoLinks.put("Дударев Максим","https://github.com/MrCrashLab/JavaPractice");
         repoLinks.put("Ермаков Илья","https://github.com/ilermak/mirea_java");
         repoLinks.put("Игамбердыев Максудбек","https://github.com/Maksudbek-I/Practice");
         repoLinks.put("Карвасарный Глеб","https://github.com/Merfarion/MireaJava");
@@ -57,5 +56,16 @@ public class MemberHandler {
             i++;
         }
         return repoName.toString();
+    }
+
+    public List<String> getNames(){
+        List<String> list = new ArrayList<>(repoLinks.keySet());
+        list.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return (int)o1.charAt(0)-(int)o2.charAt(0);
+            }
+        });
+        return list;
     }
 }
