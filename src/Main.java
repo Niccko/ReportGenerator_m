@@ -18,8 +18,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         MemberHandler memHandler = new MemberHandler();
 
-        GitHandler gitHandler = new GitHandler("d68d4911dcce714c4619619fc2f1f6ae3f1a11ec");
-        /*SwingUtilities.invokeLater(()->{
+        GitHandler gitHandler = new GitHandler("5427364168d414a86c4abf3a5e03d74b9747698a");
+        SwingUtilities.invokeLater(()->{
             GUIHandler window = null;
             try {
                 window = new GUIHandler(memHandler,gitHandler);
@@ -27,7 +27,7 @@ public class Main {
                 e.printStackTrace();
             }
             window.setVisible(true);
-        });*/
+        });
         String name = sc.nextLine();
         String temp = sc.nextLine();
         System.out.println(temp);
@@ -44,7 +44,7 @@ public class Main {
                 continue;
             }
             for (RepositoryContents repC:lst) {
-                System.out.println(repC.getName()+" type:"+ repC.getType());
+                System.out.println(repC.getName()+" | type:"+ repC.getType());
             }
         }
     }

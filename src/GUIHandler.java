@@ -7,67 +7,72 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Vector;
 
 public class GUIHandler extends JFrame {
-    public GUIHandler(MemberHandler memHandler, GitHandler gitHandler) throws IOException {
-        setSize(700,700);
+    public GUIHandler(MemberHandler memH, GitHandler gitH) throws IOException {
+        setSize(1000,700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        final String[] absPath = {"src"};
+
+        final String[] absPath = {""};
         JLabel path = new JLabel(absPath[0]);
-        path.setBounds(10,450,200,100);
-        JButton selectButton = new JButton("Select");
-        selectButton.setBounds(450,10,100,50);
+        path.setBounds(220,10,100,100);
+
+        JTextArea code = new JTextArea();
+        code.setBounds(450,80,500,550);
+        code.setEnabled(false);
 
         JPanel mainPanel = new JPanel(null);
-        JList<Object> packageList = new JList<>();
-        packageList.setBounds(220,10,200,300);
-        JComboBox memberList = new JComboBox(memHandler.getNames().toArray());
-        memberList.setBounds(10,10,200,50);
+        JComboBox<String> memberList = new JComboBox<>(memH.getNames().toArray(new String[0]));
+        memberList.setBounds(10,80,200,50);
+        JList<String> browser = new JList<String>();
+        browser.setBounds(220,80,200,400);
+        JButton selectButton = new JButton("Select");
+        selectButton.setBounds(10,140,80,25);
+        JLabel fileType = new JLabel("Content: ");
 
         memberList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Repository repo = gitHandler.getRepo((String) memberList.getSelectedItem());
-                List<RepositoryContents> packList = gitHandler.getPathContent(repo,"src");
-                List<String> packNames = new ArrayList<>();
-                for (RepositoryContents rep:packList) {
-                    packNames.add(rep.getName());
+                Repository repo = gitH.getRepo(Objects.requireNonNull(memberList.getSelectedItem()).toString());
+                List<RepositoryContents> repoContent = gitH.getPathContent(repo,"");
+                Vector<String> contentNames = new Vector<>();
+                for (RepositoryContents rc:repoContent) {
+                    contentNames.add(rc.getName());
                 }
-                packageList.setListData(packNames.toArray());
+                browser.setListData(contentNames);
             }
         });
-
-
 
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                absPath[0] +="/"+(String)packageList.getSelectedValue();
+                absPath[0] +="/"+browser.getSelectedValue();
                 path.setText(absPath[0]);
-                Repository repo = gitHandler.getRepo((String) memberList.getSelectedItem());
-                List<RepositoryContents> packList = gitHandler.getPathContent(repo,absPath[0]);
-                List<String> packNames = new ArrayList<>();
-                System.out.println(packList.get(0).getType());
-                if(packList.get(0).getType().equals("file")){
-                    System.out.println(gitHandler.decodeFile(packList.get(0)));
+
+
+
+                Repository repo = gitH.getRepo(Objects.requireNonNull(memberList.getSelectedItem()).toString());
+                List<RepositoryContents> repoContent = gitH.getPathContent(repo,absPath[0]);
+                if(repoContent.size()==1 && repoContent.get(0).getType().equals("file")){
+                    code.setText(gitH.decodeFile(repoContent.get(0)));
                     return;
                 }
-                for (RepositoryContents rep:packList) {
-                    packNames.add(rep.getName());
+                Vector<String> contentNames = new Vector<>();
+                for (RepositoryContents rc:repoContent) {
+                    contentNames.add(rc.getName());
                 }
-                packageList.setListData(packNames.toArray());
+                browser.setListData(contentNames);
             }
         });
 
-
-
-
         mainPanel.add(memberList);
-        mainPanel.add(packageList);
-        mainPanel.add(path);
+        mainPanel.add(browser);
         mainPanel.add(selectButton);
+        mainPanel.add(path);
+        mainPanel.add(code);
         add(mainPanel);
     }
 }

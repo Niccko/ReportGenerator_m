@@ -15,7 +15,7 @@ public class GitHandler {
     private MemberHandler mHandler;
     public GitHandler(String token){
         gitClient = new GitHubClient();
-        gitClient.setCredentials("Niccko","Max541679");
+        gitClient.setOAuth2Token(token);
         repoService = new RepositoryService();
         mHandler = new MemberHandler();
         contentsService = new ContentsService();
