@@ -18,10 +18,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         MemberHandler memHandler = new MemberHandler();
 
-        System.out.println(memHandler.getNames().toArray());
-
         GitHandler gitHandler = new GitHandler("d68d4911dcce714c4619619fc2f1f6ae3f1a11ec");
-        SwingUtilities.invokeLater(()->{
+        /*SwingUtilities.invokeLater(()->{
             GUIHandler window = null;
             try {
                 window = new GUIHandler(memHandler,gitHandler);
@@ -29,27 +27,25 @@ public class Main {
                 e.printStackTrace();
             }
             window.setVisible(true);
-        });
-        /*String name = sc.nextLine();
+        });*/
+        String name = sc.nextLine();
         String temp = sc.nextLine();
         System.out.println(temp);
         List<RepositoryContents> lst = gitHandler.getPathContent(gitHandler.getRepo(name),temp);
         for (RepositoryContents repC:lst) {
-            System.out.println(repC.getName());
+            System.out.println(repC.getName()+" type:"+ repC.getType());
         }
-
-        temp+="/"+sc.nextLine();
-        System.out.println(temp);
-        lst = gitHandler.getPathContent(gitHandler.getRepo(name),temp);
-        for (RepositoryContents repC:lst) {
-            System.out.println(repC.getName());
-
+        while (!temp.equals("/end")){
+            temp += "/"+sc.nextLine();
+            lst = gitHandler.getPathContent(gitHandler.getRepo(name),temp);
+            System.out.println("List size: "+lst.size() );
+            if(lst.size()==1 && lst.get(0).getType().equals("file")){
+                System.out.println(gitHandler.decodeFile(lst.get(0)));
+                continue;
+            }
+            for (RepositoryContents repC:lst) {
+                System.out.println(repC.getName()+" type:"+ repC.getType());
+            }
         }
-        temp+="/"+sc.nextLine();
-        System.out.println(temp);
-        lst = gitHandler.getPathContent(gitHandler.getRepo(name),temp);
-        for (RepositoryContents repC:lst) {
-
-        }*/
     }
 }

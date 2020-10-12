@@ -49,8 +49,10 @@ public class GUIHandler extends JFrame {
                 Repository repo = gitHandler.getRepo((String) memberList.getSelectedItem());
                 List<RepositoryContents> packList = gitHandler.getPathContent(repo,absPath[0]);
                 List<String> packNames = new ArrayList<>();
-                if(packList.get(0).getType() == "file"){
-
+                System.out.println(packList.get(0).getType());
+                if(packList.get(0).getType().equals("file")){
+                    System.out.println(gitHandler.decodeFile(packList.get(0)));
+                    return;
                 }
                 for (RepositoryContents rep:packList) {
                     packNames.add(rep.getName());
